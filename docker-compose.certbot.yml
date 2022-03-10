@@ -1,0 +1,24 @@
+version: '3.6'
+
+services:
+
+  auto-letsencrypt:
+    container_name: auto-letsencrypt
+    image: gordonchan/auto-letsencrypt
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./certbot/logs:/var/log/letsencrypt
+      - ./certbot/conf:/etc/letsencrypt # certificate will be generate here
+      - ./certbot/lib:/var/lib/letsencrypt
+      - ./certbot/www:/var/www/certbot
+    environment:
+      - EMAIL=my@email.com
+      - WEBROOT_PATH=/var/www/certbot
+      - DOMAINS=domain.com www.domain.com # add all your domain here
+      - CHECK_FREQ=7
+    restart: always
+
+networks:
+  default:
+    external:
+      name: lemp-network

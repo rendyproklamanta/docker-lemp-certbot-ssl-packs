@@ -1,0 +1,45 @@
+version: '3.6'
+
+services:
+
+  php-fpm:
+    build:
+      context: ./
+      dockerfile: ./php/Dockerfile.php74
+    image: lemp/phpfpm
+    container_name: php-fpm
+    restart: always
+    volumes:
+      - ./php/sites/public/:/var/www/public/
+      - ./php/config/php.ini:/usr/local/etc/php/php.ini
+    expose:
+      - 9000
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: always
+    volumes:
+      # Nginx Global Configurations
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf/
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+      # Certbot
+      - ./certbot/conf/:/etc/letsencrypt/
+      - ./certbot/www/:/var/www/certbot/
+
+      # Vhost
+      - ./php/sites/conf/:/etc/nginx/sites-available/
+    volumes_from:
+      - php-fpm
+    depends_on:
+      - php-fpm
+    ports:
+      - "80:80"
+      - "443:443"
+
+networks:
+  default:
+    external:
+      name: lemp-network
