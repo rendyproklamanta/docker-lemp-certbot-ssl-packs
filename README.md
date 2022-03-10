@@ -22,15 +22,14 @@ docker-compose -f docker-compose.database.yml up --build -d
 
 <br>
 
-> MySql & PhpMyAdmin Credential
-<br>
+```
+MySql & PhpMyAdmin Credential
 user : root
-<br>
- password : root
-<br><br>
+password : root
+
 You can change password root in docker-compose.database.yml
-<br>
-**MYSQL_ROOT_PASSWORD** 
+MYSQL_ROOT_PASSWORD
+```
 
 <br>
 <br>
@@ -78,7 +77,7 @@ You can change password root in docker-compose.database.yml
   docker-compose -f docker-compose.certbot.yml up --build --force-recreate -d
 ```
 
-7. Edit your nginx domain conf and change to template **/php/sites/template_https.conf.example** to auto redirect SSL
+7. To auto redirect to SSL (https). Edit your nginx domain conf and change to template **/php/sites/template_https.conf.example** . Change all text **domain.com** to your domain
 
 8. Then restart nginx-phpfpm :
 ```
